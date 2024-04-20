@@ -1,0 +1,7 @@
+{
+  "LoggerSettings": {
+    "AppName": "FinnancialPortfolio",
+    "WriteToFile": false,
+    "StructuredConsoleLogging": true
+  }
+}

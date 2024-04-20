@@ -1,0 +1,6 @@
+{
+  "DatabaseSettings": {
+    "DBProvider": "postgresql",
+    "ConnectionString": "Host=localhost;Port=5432;Database=FinnancialPortfolio;Username=postgres;Password=123qwe;Include Error Detail=true"
+  }
+}
