@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Pedro Ventura",
+  "classifications": [ "ASP.NET Core", "Core", "MVC", "Template", "Web" ],
+  "tags": {
+    "language": "C#"
+  },
+  "identity": "Template.PV",
+  "name": "Template.PVentura",
+  "shortName": "pv-test",
+  "sourceName": "FinnancialPortoflio",
+}
