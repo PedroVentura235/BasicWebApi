@@ -76,6 +76,8 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
+    app.UseInfrastructure();
+
     app.UseExceptionHandler();
     app.Run();
 }

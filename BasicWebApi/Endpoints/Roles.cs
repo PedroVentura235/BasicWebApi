@@ -21,6 +21,20 @@ public class Roles : ICarterModule
                 return await roleService.GetListAsync(cancellationToken);
             });
 
+        group.MapGet("/{id}",
+            [MustHavePermission(PermissionAction.View, PermissionResource.Roles)]
+        async (string id, IRoleService roleService, CancellationToken cancellationToken) =>
+            {
+                return await roleService.GetByIdAsync(id, cancellationToken);
+            });
+
+        group.MapGet("/{id}/permissions",
+            [MustHavePermission(PermissionAction.View, PermissionResource.Roles)]
+        async (string id, IRoleService roleService, CancellationToken cancellationToken) =>
+            {
+                return await roleService.GetByIdWithPermissionsAsync(id, cancellationToken);
+            });
+
         group.MapPost("/",
             [MustHavePermission(PermissionAction.Create, PermissionResource.Roles)]
         async (CreateOrUpdateRoleRequest request, IRoleService roleService) =>

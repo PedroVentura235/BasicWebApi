@@ -1,5 +1,7 @@
 ﻿using Application.Identity;
 using Asp.Versioning;
+using Asp.Versioning.Conventions;
+using BasicWebApi.Infrastructure.Auth;
 using Infrastructure.Auth.Permissions;
 using Infrastructure.Common;
 using Infrastructure.Exceptions;
@@ -8,6 +10,7 @@ using Infrastructure.Identity.KeyCloak;
 using Infrastructure.Identity.Services;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,7 +44,15 @@ public static class Startup
 
         services.AddServices();
 
+        services.AddCurrentUser();
+
         return services;
+    }
+
+    public static WebApplication UseInfrastructure(this WebApplication app)
+    {
+        app.UseCurrentUser();
+        return app;
     }
 
     private static IServiceCollection AddApiVersioning(this IServiceCollection services)
@@ -67,6 +78,15 @@ public static class Startup
         services
             .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>()
             .AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
+    internal static IApplicationBuilder UseCurrentUser(this WebApplication app) =>
+        app.UseMiddleware<CurrentUserMiddleware>();
+
+    private static IServiceCollection AddCurrentUser(this IServiceCollection services) =>
+        services
+            .AddScoped<CurrentUserMiddleware>()
+            .AddScoped<ICurrentUser, CurrentUser>()
+            .AddScoped(sp => (ICurrentUserInitializer)sp.GetRequiredService<ICurrentUser>());
 
     public static async Task InitializeDatabasesAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
     {

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Identity.KeyCloak;
+
 public static class KeyCloakStartup
 {
     public static void AddKeycloakAuthorization(this IServiceCollection services, IConfiguration config)
@@ -30,7 +31,7 @@ public static class KeyCloakStartup
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = "http://localhost:8080/realms/Test";
+                options.Authority = "http://localhost:8080/realms/BasicApi";
                 options.SaveToken = false;
                 options.RequireHttpsMetadata = false;
 

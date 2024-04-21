@@ -34,6 +34,6 @@ public class Users : ICarterModule
         async (string userId, IUserService userService, CancellationToken cancellationToken) =>
         {
             return await userService.DeleteUserAsync(userId);
-        });
+        }).RequireAuthorization();
     }
 }

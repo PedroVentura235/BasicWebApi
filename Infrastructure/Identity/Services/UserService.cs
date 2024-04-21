@@ -77,6 +77,18 @@ public class UserService : IUserService
                .ProjectToType<UserDetailsDto>()
                .ToListAsync(cancellationToken));
 
+    public async Task<UserDetailsDto> GetAsync(string userEmail, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users
+            .AsNoTracking()
+            .Where(u => u.Email == userEmail)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        _ = user ?? throw new NotFoundException("User Not Found.");
+
+        return user.Adapt<UserDetailsDto>();
+    }
+
     public async Task<string> DeleteUserAsync(string id)
     {
         var user = await _userManager.FindByIdAsync(id);

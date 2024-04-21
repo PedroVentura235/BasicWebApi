@@ -1,10 +1,11 @@
 ﻿using Application.Identity;
+using BasicWebApi.Infrastructure.Auth;
 using Infrastructure.Auth;
 using System.Security.Claims;
 
 namespace Infrastructure.Identity.Services;
 
-public class CurrentUser : ICurrentUser
+public class CurrentUser : ICurrentUser, ICurrentUserInitializer
 {
     private ClaimsPrincipal? _user;
 
@@ -19,8 +20,13 @@ public class CurrentUser : ICurrentUser
 
     public string GetUserEmail() => _user?.GetEmail() ?? string.Empty;
 
-    //public Guid GetUserId() =>
-    //    IsAuthenticated()
-    //        ? Guid.Parse(_user?.GetUserId() ?? Guid.Empty.ToString())
-    //        : _userId;
+    public void SetCurrentUser(ClaimsPrincipal user)
+    {
+        if (_user != null)
+        {
+            throw new Exception("Method reserved for in-scope initialization");
+        }
+
+        _user = user;
+    }
 }

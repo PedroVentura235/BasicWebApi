@@ -1,6 +1,8 @@
 ﻿using Application.Exceptions;
 using Application.Identity.Roles;
 using Infrastructure.Auth;
+using Infrastructure.Auth.Permissions;
+using Infrastructure.Persistence.Context;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +13,14 @@ internal class RoleService : IRoleService
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ApplicationDbContext _db;
 
     public RoleService(
-        RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
+        RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, ApplicationDbContext db)
     {
         _roleManager = roleManager;
         _userManager = userManager;
+        _db = db;
     }
 
     public async Task<List<RoleDto>> GetListAsync(CancellationToken cancellationToken) =>
@@ -24,6 +28,23 @@ internal class RoleService : IRoleService
         .AsNoTracking()
         .ProjectToType<RoleDto>()
         .ToListAsync(cancellationToken);
+
+    public async Task<RoleDto> GetByIdAsync(string id, CancellationToken cancellationToken) =>
+        await _db.Roles.SingleOrDefaultAsync(x => x.Id == id, cancellationToken) is { } role
+            ? role.Adapt<RoleDto>()
+            : throw new NotFoundException("Role Not Found");
+
+    public async Task<RoleDto> GetByIdWithPermissionsAsync(string roleId, CancellationToken cancellationToken)
+    {
+        RoleDto role = await GetByIdAsync(roleId, cancellationToken);
+
+        role.Permissions = await _db.RoleClaims
+            .Where(c => c.RoleId == roleId && c.ClaimType == Claims.Permission)
+            .Select(c => c.ClaimValue!)
+            .ToListAsync(cancellationToken);
+
+        return role;
+    }
 
     public async Task<string> CreateOrUpdateAsync(CreateOrUpdateRoleRequest request)
     {

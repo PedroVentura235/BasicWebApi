@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Persistence;
+
 internal class ApplicationDbSeeder
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
@@ -16,9 +17,9 @@ internal class ApplicationDbSeeder
     private readonly IKeyCloakService _keyCloakService;
 
     public ApplicationDbSeeder(
-        RoleManager<ApplicationRole> roleManager, 
-        UserManager<ApplicationUser> userManager, 
-        ILogger<ApplicationDbSeeder> logger, 
+        RoleManager<ApplicationRole> roleManager,
+        UserManager<ApplicationUser> userManager,
+        ILogger<ApplicationDbSeeder> logger,
         IKeyCloakService keyCloakService)
     {
         _roleManager = roleManager;
@@ -104,7 +105,6 @@ internal class ApplicationDbSeeder
             var password = new PasswordHasher<ApplicationUser>();
             adminUser.PasswordHash = password.HashPassword(adminUser, "123qweassd");
             await _userManager.CreateAsync(adminUser);
-
         }
 
         // Assign role to user
