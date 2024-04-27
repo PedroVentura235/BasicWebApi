@@ -8,5 +8,5 @@
   "identity": "Template.PV",
   "name": "Template.PVentura",
   "shortName": "pv-test",
-  "sourceName": "FinnancialPortoflio",
+  "sourceName": "BasicWebApi",
 }

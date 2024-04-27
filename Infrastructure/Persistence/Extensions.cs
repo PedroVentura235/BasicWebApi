@@ -1,4 +1,6 @@
-﻿using Infrastructure.Persistence.Context;
+﻿using BasicWebApi.Application.Persistence;
+using BasicWebApi.Domain.Base;
+using Infrastructure.Persistence.Context;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,8 +31,18 @@ internal static class Extensions
             .AddTransient<IDatabaseInitializer, DatabaseInitializer>()
             .AddTransient<ApplicationDbInitializer>()
             .AddTransient<ApplicationDbSeeder>();
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        services.AddScoped(typeof(IRepository<>), typeof(ApplicationRepository<>));
 
-        services.AddScoped(typeof(ApplicationRepository<>));
+        foreach (var aggregateRootType in
+            typeof(IAggregateRoot).Assembly.GetExportedTypes()
+                .Where(t => typeof(IAggregateRoot).IsAssignableFrom(t) && t.IsClass)
+                .ToList())
+        {
+            // Add ReadRepositories.
+            services.AddScoped(typeof(IReadRepository<>).MakeGenericType(aggregateRootType), sp =>
+                sp.GetRequiredService(typeof(IRepository<>).MakeGenericType(aggregateRootType)));
+        }
 
         return services;
     }

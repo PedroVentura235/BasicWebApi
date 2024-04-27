@@ -13,7 +13,7 @@ public class Transactions : ICarterModule
 
         group.MapGet("/", () =>
         {
-            throw new CustomException("oh nao um erro");
+            return "Transactions";
         });
     }
 }
