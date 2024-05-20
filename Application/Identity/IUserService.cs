@@ -19,4 +19,6 @@ public interface IUserService
     Task<UserDetailsDto> GetAsync(string userEmail, CancellationToken cancellationToken);
 
     Task<bool> HasPermissionAsync(string userEmail, string permission, CancellationToken cancellationToken = default);
+
+    Task<List<string>> GetPermissionsAsync(string userEmail, CancellationToken cancellationToken);
 }

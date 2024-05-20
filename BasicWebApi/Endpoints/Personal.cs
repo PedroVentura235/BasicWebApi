@@ -21,5 +21,12 @@ public class Personal : ICarterModule
         {
             return await userService.GetAsync(user.GetUserEmail(), cancellationToken);
         });
+
+        group.MapGet("/permissions",
+       [MustHavePermission(PermissionAction.Search, PermissionResource.Users)]
+        async (IUserService userService, CancellationToken cancellationToken, ICurrentUser user, ClaimsPrincipal principal) =>
+       {
+           return await userService.GetPermissionsAsync(user.GetUserEmail(), cancellationToken);
+       });
     }
 }

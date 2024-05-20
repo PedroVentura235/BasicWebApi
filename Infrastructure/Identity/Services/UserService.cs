@@ -106,10 +106,6 @@ public class UserService : IUserService
 
     public async Task<bool> HasPermissionAsync(string userEmail, string permission, CancellationToken cancellationToken)
     {
-        //var permissions = await _cache.GetOrSetAsync(
-        //    _cacheKeys.GetCacheKey(FSHClaims.Permission, userId),
-        //    () => GetPermissionsAsync(userId, cancellationToken),
-        //    cancellationToken: cancellationToken);
         List<string> permissions = await GetPermissionsAsync(userEmail, cancellationToken);
 
         return permissions?.Contains(permission) ?? false;

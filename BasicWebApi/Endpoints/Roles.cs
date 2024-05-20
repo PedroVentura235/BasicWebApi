@@ -35,6 +35,17 @@ public class Roles : ICarterModule
                 return await roleService.GetByIdWithPermissionsAsync(id, cancellationToken);
             });
 
+        group.MapPut("/{id}/permissions",
+            [MustHavePermission(PermissionAction.View, PermissionResource.Roles)]
+        async (string id, UpdateRolePermissionsRequest request, IRoleService roleService, CancellationToken cancellationToken) =>
+            {
+                //if (id != request.RoleId)
+                //{
+                //    return Result.Fail("Invalid Role id");
+                //}
+                return await roleService.UpdatePermissionsAsync(request, cancellationToken);
+            });
+
         group.MapPost("/",
             [MustHavePermission(PermissionAction.Create, PermissionResource.Roles)]
         async (CreateOrUpdateRoleRequest request, IRoleService roleService) =>

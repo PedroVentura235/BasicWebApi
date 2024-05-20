@@ -5,14 +5,37 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ardalis.Specification" Version="8.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.9.1" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\BasicWebApi.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Features\Products\Commands\Generated\CreateProductRequest.cs">
+      <DependentUpon>FeatureTemplate.csx</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Products\Commands\Generated\ImportProductRequest.cs">
+      <DependentUpon>FeatureTemplate.csx</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Products\Commands\Generated\UpdateProductRequest.cs">
+      <DependentUpon>FeatureTemplate.csx</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Products\Generated\ProductDto.cs">
+      <DependentUpon>FeatureTemplate.csx</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Products\Queries\Generated\GetProductRequest.cs">
+      <DependentUpon>FeatureTemplate.csx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>
